@@ -1,147 +1,135 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+{% extends "base.html" %}
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+{% block content %}
+    <div class="row">
 
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
+        <!-- Sidebar -->
+        {% set current_page = "dashboard" %}
+        {% include "Admin_templates/components/admin_menu.html" %}
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg bg-white border-bottom">
-    <div class="container-fluid">
-        <a class="navbar-brand fw-bold" href="#">
-            Trekking Management Application
-        </a>
+        <!-- Main Content -->
+        <div class="col-md-10">
 
-        <div class="dropdown">
-            <a href="#" class="text-dark text-decoration-none dropdown-toggle"
-                data-bs-toggle="dropdown">
-                <i class="bi bi-person-circle"></i> Admin
-            </a>
-        </div>
-    </div>
-</nav>
+            <h3 class="mb-4">Dashboard</h3>
 
-<div class="container mt-4">
+            <!-- Cards -->
+            <div class="row g-3">
 
-    <h3 class="mb-4">Dashboard</h3>
-
-    <!-- Cards -->
-    <div class="row g-3">
-
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-body d-flex justify-content-between align-items-center">
-                    <div>
-                        <small>Total Treks</small>
-                        <h3>XX</h3>
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm rounded-3">
+                        <div class="card-body d-flex justify-content-between align-items-center p-4">
+                            <div>
+                                <small class="text-muted">Total Treks</small>
+                                <h3 class="fw-bold mb-0">XX</h3>
+                            </div>
+                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center"
+                                style="width:50px; height:50px;">
+                                <i class="bi bi-image-alt fs-4 text-primary"></i>
+                            </div>
+                        </div>
                     </div>
-                    <i class="bi bi-image-alt fs-2"></i>
                 </div>
-            </div>
-        </div>
 
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-body d-flex justify-content-between align-items-center">
-                    <div>
-                        <small>Total Users</small>
-                        <h3>XX</h3>
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm rounded-3">
+                        <div class="card-body d-flex justify-content-between align-items-center p-4">
+                            <div>
+                                <small class="text-muted">Total Users</small>
+                                <h3 class="fw-bold mb-0">XX</h3>
+                            </div>
+                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center"
+                                style="width:50px; height:50px;">
+                                <i class="bi bi-person fs-4 text-success"></i>
+                            </div>
+                        </div>
                     </div>
-                    <i class="bi bi-person fs-2"></i>
                 </div>
-            </div>
-        </div>
 
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-body d-flex justify-content-between align-items-center">
-                    <div>
-                        <small>Total Staff</small>
-                        <h3>XX</h3>
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm rounded-3">
+                        <div class="card-body d-flex justify-content-between align-items-center p-4">
+                            <div>
+                                <small class="text-muted">Total Staff</small>
+                                <h3 class="fw-bold mb-0">XX</h3>
+                            </div>
+                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center"
+                                style="width:50px; height:50px;">
+                                <i class="bi bi-people fs-4 text-warning"></i>
+                            </div>
+                        </div>
                     </div>
-                    <i class="bi bi-people fs-2"></i>
                 </div>
-            </div>
-        </div>
 
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-body d-flex justify-content-between align-items-center">
-                    <div>
-                        <small>Total Bookings</small>
-                        <h3>XX</h3>
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm rounded-3">
+                        <div class="card-body d-flex justify-content-between align-items-center p-4">
+                            <div>
+                                <small class="text-muted">Total Bookings</small>
+                                <h3 class="fw-bold mb-0">XX</h3>
+                            </div>
+                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center"
+                                style="width:50px; height:50px;">
+                                <i class="bi bi-calendar-event fs-4 text-info"></i>
+                            </div>
+                        </div>
                     </div>
-                    <i class="bi bi-calendar-event fs-2"></i>
                 </div>
+
             </div>
-        </div>
 
-    </div>
+            <!-- Table -->
+            <div class="card mt-4 border-0 shadow-sm rounded-3">
 
-    <!-- Table -->
-    <div class="card mt-4">
-        <div class="card-header fw-bold">
-            Recent Bookings
-        </div>
+                <div class="card-header bg-white fw-bold border-0 pt-3">
+                    Recent Bookings
+                </div>
 
-        <div class="card-body">
+                <div class="card-body pt-0">
 
-            <table class="table table-bordered table-hover">
-                <thead class="table-light">
-                    <tr>
-                        <th>Booking ID</th>
-                        <th>User</th>
-                        <th>Trek</th>
-                        <th>Booking Date</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Booking ID</th>
+                                <th>User</th>
+                                <th>Trek</th>
+                                <th>Booking Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
 
-                <tbody>
-                    <tr>
-                        <td>B001</td>
-                        <td>Amit Sharma</td>
-                        <td>Everest Base Camp</td>
-                        <td>12 May 2026</td>
-                        <td>Booked</td>
-                    </tr>
+                        <tbody>
+                            {% for booking in bookings %}
+                            <tr>
+                                <td>{{ booking.b_id }}</td>
+                                <td>{{ booking.name }}</td>
+                                <td>{{ booking.Trek }}</td>
+                                <td>{{ booking.date }}</td>
+                                <td>
+                                    {% if booking.status == 'booked' %}
+                                    <span class="badge bg-success-subtle text-success">Booked</span>
+                                    {% elif booking.status == 'cancelled' %}
+                                    <span class="badge bg-danger-subtle text-danger">Cancelled</span>
+                                    {% else %}
+                                    <span class="badge bg-secondary-subtle text-secondary">{{ booking.status }}</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
 
-                    <tr>
-                        <td>B002</td>
-                        <td>Priya Patel</td>
-                        <td>Roopkund Trek</td>
-                        <td>11 May 2026</td>
-                        <td>Booked</td>
-                    </tr>
+                    <div class="text-end mt-3">
+                        <a href="#" class="text-decoration-none">
+                            View All Bookings →
+                        </a>
+                    </div>
 
-                    <tr>
-                        <td>B003</td>
-                        <td>Rahul Verma</td>
-                        <td>Kedarkantha Trek</td>
-                        <td>10 May 2026</td>
-                        <td>Cancelled</td>
-                    </tr>
-                </tbody>
-            </table>
+                </div>
 
-            <div class="text-end">
-                <a href="#" class="text-decoration-none">
-                    View All Bookings →
-                </a>
             </div>
 
         </div>
+
     </div>
 
-</div>
-
-</body>
-</html>
+{% endblock %}

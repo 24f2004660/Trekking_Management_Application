@@ -1,0 +1,91 @@
+<!-- Sidebar -->
+<style>
+    .admin-sidebar {
+        background-color: #ffffff;
+    }
+    .admin-sidebar .nav-link {
+        color: #333;
+        border-radius: 8px;
+        padding: 10px 14px;
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+        font-size: 0.95rem;
+        transition: background-color 0.15s ease, color 0.15s ease;
+    }
+    .admin-sidebar .nav-link i {
+        font-size: 1.1rem;
+        margin-right: 10px;
+        width: 20px;
+        text-align: center;
+    }
+    .admin-sidebar .nav-link:hover {
+        background-color: #f1f3f5;
+        color: #212529;
+    }
+    .admin-sidebar .nav-link.active {
+        background-color: #e7f1ff;
+        color: #0d6efd;
+        font-weight: 600;
+    }
+    .admin-sidebar .nav-link.text-danger:hover {
+        background-color: #fdecec;
+        color: #dc3545;
+    }
+</style>
+
+<div class="col-md-2 admin-sidebar border-end vh-100 p-3">
+
+    <nav class="nav flex-column">
+
+        <a href="admin_dashboard.html"
+           class="nav-link {% if current_page == 'dashboard' %}active{% endif %}">
+            <i class="bi bi-speedometer2"></i>
+            Dashboard
+        </a>
+
+        <a href="admin_manage_treks.html"
+           class="nav-link {% if current_page == 'treks' %}active{% endif %}">
+            <i class="bi bi-map"></i>
+            Treks
+        </a>
+
+        <a href="staff.html"
+           class="nav-link {% if current_page == 'staff' %}active{% endif %}">
+            <i class="bi bi-people"></i>
+            Staff
+        </a>
+
+        <a href="users.html"
+           class="nav-link {% if current_page == 'users' %}active{% endif %}">
+            <i class="bi bi-person"></i>
+            Users
+        </a>
+
+        <a href="bookings.html"
+           class="nav-link {% if current_page == 'bookings' %}active{% endif %}">
+            <i class="bi bi-calendar-check"></i>
+            Bookings
+        </a>
+
+        <a href="reports.html"
+           class="nav-link {% if current_page == 'reports' %}active{% endif %}">
+            <i class="bi bi-file-earmark-text"></i>
+            Reports
+        </a>
+
+        <a href="settings.html"
+           class="nav-link {% if current_page == 'settings' %}active{% endif %}">
+            <i class="bi bi-gear"></i>
+            Settings
+        </a>
+
+        <a href="../homepage.html"
+           class="nav-link text-danger">
+            <i class="bi bi-box-arrow-right"></i>
+            Logout
+        </a>
+
+    </nav>
+
+</div>
