@@ -29,13 +29,14 @@
 
                         <h2 class="text-center mb-4">Login</h2>
 
-                        <form method="POST" action="">
+                        <form method="POST" action="/login">
 
                             <div class="mb-3">
                                 <input
                                     type="email"
                                     class="form-control"
                                     placeholder="Email"
+                                    name="email_id"
                                 >
                             </div>
 
@@ -44,26 +45,15 @@
                                     type="password"
                                     class="form-control"
                                     placeholder="Password"
+                                    name="password"
                                 >
                             </div>
 
-                            <div class="form-check mb-3">
-                                <input
-                                    class="form-check-input"
-                                    type="checkbox"
-                                    id="remember"
-                                >
-                                <label class="form-check-label" for="remember">
-                                    Remember me
-                                </label>
-                            </div>
-
-                            <button
+                            <input
                                 type="submit"
                                 class="btn btn-primary w-100"
+                                value="Login"
                             >
-                                Login
-                            </button>
 
                         </form>
 

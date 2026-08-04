@@ -29,13 +29,14 @@
 
                         <h2 class="text-center mb-4">Register</h2>
 
-                        <form method="POST" action="">
+                        <form method="POST" action="/register">
 
                             <div class="mb-3">
                                 <input
                                     type="text"
                                     class="form-control"
                                     placeholder="Full Name"
+                                    name="fname"
                                 >
                             </div>
 
@@ -44,6 +45,21 @@
                                     type="email"
                                     class="form-control"
                                     placeholder="Email"
+                                    name="email_id"
+                                >
+                                <small>{{error_message}}</small>
+                            </div>
+
+                            
+
+                            <div class="mb-3">
+                                <input
+                                    type="tel"
+                                    class="form-control"
+                                    placeholder="Phone Number"
+                                    name="phone"
+                                    pattern="[0-9]{10}"
+                                    title="Enter a 10-digit phone number"
                                 >
                             </div>
 
@@ -52,6 +68,7 @@
                                     type="password"
                                     class="form-control"
                                     placeholder="Password"
+                                    name="password"
                                 >
                             </div>
 
@@ -60,15 +77,16 @@
                                     type="password"
                                     class="form-control"
                                     placeholder="Confirm Password"
+                                    name="c_password"                 
                                 >
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">I am a</label>
-                                <select class="form-select">
+                                <select class="form-select" name="role">
                                     <option selected disabled>Select Role</option>
-                                    <option>User</option>
-                                    <option>Staff</option>
+                                    <option value="2">User</option>
+                                    <option value="1">Staff</option>
                                 </select>
                             </div>
 
