@@ -37,56 +37,22 @@
                     <tbody>
                         {% for trek in treks %}
                         <tr>
-                            <td>trek.trek_id</td>
-                            <td>trek.t_name</td>
-                            <td>trek.location</td>
-                            <td>trek.diff</td>
-                            <td>trek.avl_slots</td>
-                            <td>trek.status</td>
+                            <td>{{ trek.trek_id }}</td>
+                            <td>{{ trek.t_name }}</td>
+                            <td>{{ trek.location }}</td>
+                            <td>{{ trek.diff }}</td>
+                            <td>{{ trek.avl_slots }}</td>
+                            <td>{{ trek.status }}</td>
                             <td>
-                                <i class="bi bi-pencil-square me-2" href="Google.com"></i>
-                                <i class="bi bi-trash"></i>
+                                <a href="/edit_trek?trek_id={{ trek.trek_id }}" class="btn" >
+                                    <i class="bi bi-pencil-square me-2"></i>
+                                </a>
+                                <a href="#" class="btn">
+                                    <i class="bi bi-trash"></i>
+                                </a>
                             </td>
                         </tr>
                         {% endfor %}
-                        <tr>
-                            <td>2</td>
-                            <td>Roopkund Trek</td>
-                            <td>Uttarakhand</td>
-                            <td>Moderate</td>
-                            <td>15</td>
-                            <td>Open</td>
-                            <td>
-                                <i class="bi bi-pencil-square me-2"></i>
-                                <i class="bi bi-trash"></i>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>3</td>
-                            <td>Kedarkantha Trek</td>
-                            <td>Uttarakhand</td>
-                            <td>Easy</td>
-                            <td>20</td>
-                            <td>Closed</td>
-                            <td>
-                                <i class="bi bi-pencil-square me-2"></i>
-                                <i class="bi bi-trash"></i>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>4</td>
-                            <td>Hampta Pass</td>
-                            <td>Himachal</td>
-                            <td>Moderate</td>
-                            <td>12</td>
-                            <td>Open</td>
-                            <td>
-                                <i class="bi bi-pencil-square me-2"></i>
-                                <i class="bi bi-trash"></i>
-                            </td>
-                        </tr>
 
                     </tbody>
 

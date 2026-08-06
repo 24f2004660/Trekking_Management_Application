@@ -71,12 +71,16 @@ app_dct = [
 #Admin
 @app.route("/admin")
 def admin_dashboard():
-    return render_template("Admin_templates/admin_dashboard.html")
+    t_count = db.session.query(Trek).count()
+    u_count = db.session.query(user_profile).count()
+    s_count = db.session.query(staff_profile).count()
+    return render_template("Admin_templates/admin_dashboard.html" , t_count = t_count, u_count = u_count ,s_count = s_count)
 
 from datetime import datetime
 
 @app.route("/add_trek", methods=["GET", "POST"])
 def admin_add_new_trek():
+    staffs = get_staff_data()
     if request.method == "POST":
         t_name = request.form.get("trek_name")
         location = request.form.get("location")
@@ -101,7 +105,7 @@ def admin_add_new_trek():
         )
         db.session.add(new_trek)
         db.session.commit()
-    return render_template("Admin_templates/admin_add_new_trek.html")
+    return render_template("Admin_templates/admin_add_new_trek.html", staffs=staffs)
 
 @app.route("/manage_treks")
 def admin_manage_treks():
@@ -117,6 +121,49 @@ def admin_manage_staffs():
 def admin_manage_users():
     u_data = get_user_data()
     return render_template("Admin_templates/admin_manage_users.html", u_data=u_data)
+
+@app.route("/edit_trek")
+def admin_edit_trek():
+    trek_id = request.args["trek_id"]
+    trek_searched = search_trek(trek_id)
+    staffs = get_staff_data()
+    return render_template("Admin_templates/admin_edit_trek.html", trek_data = trek_searched , staffs = staffs)
+
+@app.route("/update_trek", methods=["GET", "POST"])
+def update_trek():
+    t_id = request.form.get("t_id")
+    t_name = request.form.get("trek_name")
+    start_date = request.form.get("start_date")
+    location = request.form.get("location")
+    difficulty = request.form.get("difficulty")
+    duration = request.form.get("duration")
+    avl_slots = request.form.get("avl_slots")
+    end_date = request.form.get("end_date")
+    asn_staff = request.form.get("asn_staff")
+    status = request.form.get("status")
+    description = request.form.get("description")
+
+    start_date = datetime.strptime(start_date, "%Y-%m-%d").date()
+    end_date = datetime.strptime(end_date, "%Y-%m-%d").date()
+
+    old_trek_details = db.session.query(Trek).filter(Trek.trek_id == t_id).first()
+
+    old_trek_details.t_name = t_name
+    old_trek_details.start_date = start_date
+    old_trek_details.end_date = end_date
+    old_trek_details.location = location
+    old_trek_details.diff = difficulty
+    old_trek_details.duration = duration
+    old_trek_details.avl_slots = avl_slots
+    old_trek_details.assign_s_id = asn_staff
+    old_trek_details.status = status
+    old_trek_details.description = description
+
+    db.session.commit() #saved
+
+    return redirect(url_for("admin_manage_treks"))
+
+
 
 #User
 @app.route("/user")
@@ -140,6 +187,10 @@ def get_staff_data():
     s_data = db.session.query(staff_profile).filter().all()
     return s_data
 
+def get_trek_data():
+    t_data = db.session.query(Trek).filter().all()
+    return t_data
+
 def search_staff(id):
     staff_searched = db.session.query(staff_profile).filter(staff_profile.staff_id == id).first()
     return staff_searched
@@ -147,3 +198,7 @@ def search_staff(id):
 def search_user(id):
     user_searched = db.session.query(user_profile).filter(user_profile.user_id == id).first()
     return user_searched
+
+def search_trek(id):
+    trek_searched = db.session.query(Trek).filter(Trek.trek_id == id).first()
+    return trek_searched
