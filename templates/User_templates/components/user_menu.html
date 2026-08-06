@@ -1,0 +1,79 @@
+<!-- Sidebar -->
+<style>
+    .user-sidebar {
+        background-color: #ffffff;
+    }
+    .user-sidebar .nav-link {
+        color: #333;
+        border-radius: 8px;
+        padding: 10px 14px;
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+        font-size: 0.95rem;
+        transition: background-color 0.15s ease, color 0.15s ease;
+    }
+    .user-sidebar .nav-link i {
+        font-size: 1.1rem;
+        margin-right: 10px;
+        width: 20px;
+        text-align: center;
+    }
+    .user-sidebar .nav-link:hover {
+        background-color: #f1f3f5;
+        color: #212529;
+    }
+    .user-sidebar .nav-link.active {
+        background-color: #e7f1ff;
+        color: #0d6efd;
+        font-weight: 600;
+    }
+    .user-sidebar .nav-link.text-danger:hover {
+        background-color: #fdecec;
+        color: #dc3545;
+    }
+</style>
+
+<div class="col-md-2 user-sidebar border-end vh-100 p-3">
+
+    <nav class="nav flex-column">
+
+        <a href="{{ url_for('user_dashboard') }}"
+           class="nav-link {% if current_page == 'dashboard' %}active{% endif %}">
+            <i class="bi bi-speedometer2"></i>
+            Dashboard
+        </a>
+
+        <a href="browse_treks.html"
+           class="nav-link {% if current_page == 'browse_treks' %}active{% endif %}">
+            <i class="bi bi-map"></i>
+            Browse Treks
+        </a>
+
+        <a href="my_bookings.html"
+           class="nav-link {% if current_page == 'my_bookings' %}active{% endif %}">
+            <i class="bi bi-calendar-check"></i>
+            My Bookings
+        </a>
+
+        <a href="history.html"
+           class="nav-link {% if current_page == 'history' %}active{% endif %}">
+            <i class="bi bi-clock-history"></i>
+            History
+        </a>
+
+        <a href="profile.html"
+           class="nav-link {% if current_page == 'profile' %}active{% endif %}">
+            <i class="bi bi-person"></i>
+            Profile
+        </a>
+
+        <a href="../homepage.html"
+           class="nav-link text-danger">
+            <i class="bi bi-box-arrow-right"></i>
+            Logout
+        </a>
+
+    </nav>
+
+</div>

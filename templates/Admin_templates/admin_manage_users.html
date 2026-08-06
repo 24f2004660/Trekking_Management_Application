@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% set current_user = 'Admin' %}
+{% block content %}
+    <div class="row">
+
+        <!-- Sidebar -->
+        {% set current_page = "users" %}
+        {% include "Admin_templates/components/admin_menu.html" %}
+
+        <!-- Main Content -->
+        <div class="col-md-10">
+
+            <h3 class="mb-4">Registered Users</h3>
+
+            <div class="mb-3">
+                <select class="form-select" name="status" onchange="showStaffDetails()">
+                    <option selected value = 0>Active</option>
+                    <option value="1">Blacklisted</option>
+                </select>
+            </div>
+
+            <div id="staffRequestTabsContent">
+
+                <!-- Active -->
+                <div id="active" style="display: block;">                  
+                    <div class="card border-0 shadow-sm rounded-3">
+                        <div class="card-body pt-3">
+
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Name</th>
+                                        <!-- <th>Email</th> -->
+                                        <th>Contact</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {%for u in u_data %}
+                                        <tr>
+                                            <td>{{u.name}}</td>
+                                            <!-- <td>{{u.email}}</td> -->
+                                            <td>{{u.phone_number}}</td>
+                                            <td>
+                                                <a href="#" class="btn btn-danger btn-sm">Reject</a>
+                                            </td>
+                                        
+                                        </tr>
+                                    {%endfor%}
+
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Blacklisted -->
+                <div id="blacklisted" style="display: none;">
+                    <div class="card border-0 shadow-sm rounded-3">
+                        <div class="card-body pt-3">
+
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Name</th>
+                                        <!-- <th>Email</th> -->
+                                        <th>Contact</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {%for u in user_data %}
+                                        <tr>
+                                            <td>{u.name}</td>
+                                            <!-- <td>{u.email}</td> -->
+                                            <td>{u.contact}</td>
+                                            <td>
+                                                <a href="#" class="btn btn-danger btn-sm">Reject</a>
+                                            </td>
+                                        </tr>
+                                    {%endfor%}
+                                    <tr>
+                                        <td>Neha</td>
+                                        <!-- <td>neha@mail.com</td> -->
+                                        <td>9123456780</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Arjun Mehta</td>
+                                        <!-- <td>arjun@mail.com</td> -->
+                                        <td>9968776655</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Priya Nair</td>
+                                        <!-- <td>priya@mail.com</td> -->
+                                        <td>9965433210</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        function showStaffDetails() {
+            const status = document.getElementsByName("status")[0];
+            const active = document.getElementById("active");
+            const blacklisted = document.getElementById("blacklisted");
+
+            if (status.value === "1") {
+                active.style.display = "none";
+                blacklisted.style.display = "block";
+            } else {
+                active.style.display = "block";
+                blacklisted.style.display = "none";
+            }
+        }
+    </script>
+
+{% endblock %}

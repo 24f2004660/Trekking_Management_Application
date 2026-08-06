@@ -1,0 +1,26 @@
+admin_manage_users.html
+
+<tr>
+                                        <td>Neha Joshi</td>
+                                        <!-- <td>neha@mail.com</td> -->
+                                        <td>9123456780</td>
+                                        <td>
+                                            <a href="#" class="btn btn-danger btn-sm">Reject</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Arjun Mehta</td>
+                                        <!-- <td>arjun@mail.com</td> -->
+                                        <td>9968776655</td>
+                                        <td>
+                                            <a href="#" class="btn btn-danger btn-sm">Reject</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Priya Nair</td>
+                                        <!-- <td>priya@mail.com</td> -->
+                                        <td>9965433210</td>
+                                        <td>
+                                            <a href="#" class="btn btn-danger btn-sm">Reject</a>
+                                        </td>
+                                    </tr>

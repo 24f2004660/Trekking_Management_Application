@@ -38,26 +38,26 @@
 
     <nav class="nav flex-column">
 
-        <a href="admin_dashboard.html"
+        <a href="{{ url_for('admin_dashboard') }}"
            class="nav-link {% if current_page == 'dashboard' %}active{% endif %}"
            >
             <i class="bi bi-speedometer2"></i>
             Dashboard
         </a>
 
-        <a href="admin_manage_treks.html"
+        <a href="{{ url_for('admin_manage_treks') }}"
            class="nav-link {% if current_page == 'treks' %}active{% endif %}">
             <i class="bi bi-map"></i>
             Treks
         </a>
 
-        <a href="staff.html"
+        <a href="{{ url_for('admin_manage_staffs') }}"
            class="nav-link {% if current_page == 'staff' %}active{% endif %}">
             <i class="bi bi-people"></i>
             Staff
         </a>
 
-        <a href="users.html"
+        <a href="{{ url_for('admin_manage_users') }}"
            class="nav-link {% if current_page == 'users' %}active{% endif %}">
             <i class="bi bi-person"></i>
             Users

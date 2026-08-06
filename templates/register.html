@@ -30,29 +30,53 @@
                         <h2 class="text-center mb-4">Register</h2>
 
                         <form method="POST" action="/register">
-
-                            <div class="mb-3">
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    placeholder="Full Name"
-                                    name="fname"
-                                >
+                                <div class="mb-3">
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        placeholder="Full Name"
+                                        name="fname"
+                                    >
+                                </div>
+                            <div class="row mb-3">
+    
+                                <div class="col-md-6">
+                                    <input
+                                        type="email"
+                                        class="form-control"
+                                        placeholder="Email"
+                                        name="email_id"
+                                    >
+                                    <small class="text-danger">{{error_message}}</small>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <span class="input-group-text">+91</span>
+                                        <input
+                                            type="tel"
+                                            class="form-control"
+                                            placeholder="Phone Number"
+                                            name="phone"
+                                            pattern="[0-9]{10}"
+                                            title="Enter a 10-digit phone number"
+                                        >
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="mb-3">
+                            <!-- <div class="mb-3">
                                 <input
                                     type="email"
                                     class="form-control"
                                     placeholder="Email"
                                     name="email_id"
                                 >
-                                <small>{{error_message}}</small>
-                            </div>
+                                
+                            </div> -->
 
                             
 
-                            <div class="mb-3">
+                            <!-- <div class="mb-3">
                                 <input
                                     type="tel"
                                     class="form-control"
@@ -61,7 +85,7 @@
                                     pattern="[0-9]{10}"
                                     title="Enter a 10-digit phone number"
                                 >
-                            </div>
+                            </div> -->
 
                             <div class="mb-3">
                                 <input
@@ -79,15 +103,37 @@
                                     placeholder="Confirm Password"
                                     name="c_password"                 
                                 >
+                                <small class="text-danger">{{error_pass}}</small>
+                            </div>
+                            
+
+                            <div class="row mb-3">
+                                <label class="form-label">I am a</label>
+                                <div class="col-md-4">
+                                    
+                                    <select class="form-select" name="role" onchange="hide_show_other_details()">
+                                        <option selected disabled>Select Role</option>
+                                        <option value="2">User</option>
+                                        <option value="1">Staff</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-8" id="staff_details" style="display: none;" >
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        placeholder="Experience"
+                                        name="exp"                 
+                                    >
+                                </div>
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">I am a</label>
-                                <select class="form-select" name="role">
-                                    <option selected disabled>Select Role</option>
-                                    <option value="2">User</option>
-                                    <option value="1">Staff</option>
-                                </select>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    placeholder="Address"
+                                    name="address"
+                                >
                             </div>
 
                             <button
@@ -101,7 +147,7 @@
 
                         <p class="text-center mt-3 mb-0">
                             Already have an account?
-                            <a href="./login.html">Login here</a>
+                            <a href="{{ url_for('login') }}">Login here</a>
                         </p>
 
                     </div>
@@ -110,6 +156,19 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function hide_show_other_details(){
+            const role = document.getElementsByName("role")[0];
+            const staff_details = document.getElementById("staff_details");
+
+            if (role.value === "1") {
+                staff_details.style.display = "block";
+            } else {
+                staff_details.style.display = "none";
+            }
+        }
+    </script>
 
 </body>
 </html>

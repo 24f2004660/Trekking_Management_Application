@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% set current_user = 'User' %}
+{% block content %}
+    <div class="row">
+
+        <!-- Sidebar -->
+        {% set current_page = "dashboard" %}
+        {% include "User_templates/components/user_menu.html" %}
+
+        <!-- Main Content -->
+        <div class="col-md-10">
+
+            <h3 class="mb-1">Welcome, {{ current_user }}!</h3>
+            <p class="text-muted mb-4">Here's what's happening with your treks.</p>
+
+            <!-- Available Treks -->
+            <div class="card border-0 shadow-sm rounded-3 mb-4">
+
+                <div class="card-header bg-white border-0 pt-3 d-flex justify-content-between align-items-center">
+                    <span class="fw-bold">Available Treks</span>
+
+                    <div class="d-flex gap-2">
+                        <select class="form-select form-select-sm" style="width: auto;">
+                            <option selected>Difficulty: All</option>
+                            <option>Easy</option>
+                            <option>Moderate</option>
+                            <option>Hard</option>
+                        </select>
+
+                        <select class="form-select form-select-sm" style="width: auto;">
+                            <option selected>Location: All</option>
+                            <option>Nepal</option>
+                            <option>Uttarakhand</option>
+                            <option>Himachal</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="card-body pt-0">
+
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Trek Name</th>
+                                <th>Location</th>
+                                <th>Difficulty</th>
+                                <th>Duration</th>
+                                <th>Available Slots</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>Everest Base Camp</td>
+                                <td>Nepal</td>
+                                <td>Hard</td>
+                                <td>12 Days</td>
+                                <td>10</td>
+                                <td>
+                                    <a href="#" class="btn btn-primary btn-sm">Book Now</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Roopkund Trek</td>
+                                <td>Uttarakhand</td>
+                                <td>Moderate</td>
+                                <td>7 Days</td>
+                                <td>7</td>
+                                <td>
+                                    <a href="#" class="btn btn-primary btn-sm">Book Now</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Hampta Pass</td>
+                                <td>Himachal</td>
+                                <td>Moderate</td>
+                                <td>5 Days</td>
+                                <td>8</td>
+                                <td>
+                                    <a href="#" class="btn btn-primary btn-sm">Book Now</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+            <!-- My Bookings -->
+            <div class="card border-0 shadow-sm rounded-3">
+
+                <div class="card-header bg-white fw-bold border-0 pt-3">
+                    My Bookings
+                </div>
+
+                <div class="card-body pt-0">
+
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Trek Name</th>
+                                <th>Booking Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>Kedarkantha Trek</td>
+                                <td>10 May 2026</td>
+                                <td>
+                                    <span class="badge bg-success-subtle text-success">Booked</span>
+                                </td>
+                                <td>
+                                    <a href="#" class="btn btn-outline-secondary btn-sm">View Details</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Valley of Flowers</td>
+                                <td>2 Jun 2026</td>
+                                <td>
+                                    <span class="badge bg-secondary-subtle text-secondary">Pending</span>
+                                </td>
+                                <td>
+                                    <a href="#" class="btn btn-outline-secondary btn-sm">View Details</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Chadar Trek</td>
+                                <td>15 Jan 2026</td>
+                                <td>
+                                    <span class="badge bg-danger-subtle text-danger">Cancelled</span>
+                                </td>
+                                <td>
+                                    <a href="#" class="btn btn-outline-secondary btn-sm">View Details</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}
