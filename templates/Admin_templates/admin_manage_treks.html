@@ -15,9 +15,14 @@
                 </div>
 
                 <!-- Search -->
-                <div class="mb-3">
-                    <input type="text" class="form-control" id="searchInput" placeholder="Search Treks..." onkeyup="filterTreks()">
-                </div>
+                <form method="GET" action="{{ url_for('admin_manage_treks') }}" class="mb-3 d-flex">
+                    <input type="text" name="search" class="form-control me-2"
+                           placeholder="Search Treks..." value="{{ search or '' }}">
+                    <button type="submit" class="btn btn-outline-primary me-2">Search</button>
+                    {% if search %}
+                        <a href="{{ url_for('admin_manage_treks') }}" class="btn btn-outline-secondary">Clear</a>
+                    {% endif %}
+                </form>
 
                 <!-- Table -->
                 <table class="table table-bordered table-hover bg-white">
@@ -37,7 +42,7 @@
 
                     <tbody>
                         {% for trek in treks %}
-                        <tr name="trekRow" data-name="{{ trek.t_name|lower }}">
+                        <tr>
                             <td>{{ trek.trek_id }}</td>
                             <td>{{ trek.t_name }}</td>
                             <td>{{ trek.location }}</td>
@@ -68,6 +73,10 @@
                                 </a>
                             </td>
                         </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="8" class="text-center text-muted">No treks found.</td>
+                        </tr>
                         {% endfor %}
 
                     </tbody>
@@ -76,22 +85,5 @@
 
             </div>
         </div>
-
-<script>
-    function filterTreks() {
-        const searchValue = document.getElementById("searchInput").value.toLowerCase();
-        const rows = document.getElementsByName("trekRow");
-
-        for (let i = 0; i < rows.length; i++) {
-            const rowName = rows[i].getAttribute("data-name");
-
-            if (searchValue !== "" && rowName.indexOf(searchValue) === -1) {
-                rows[i].style.display = "none";
-            } else {
-                rows[i].style.display = "table-row";
-            }
-        }
-    }
-</script>
 
 {% endblock %}

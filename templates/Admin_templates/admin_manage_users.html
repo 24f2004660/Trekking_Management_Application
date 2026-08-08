@@ -12,15 +12,21 @@
 
             <h3 class="mb-4">Registered Users</h3>
 
-            <div class="d-flex gap-2 mb-3">
-                <input type="text" class="form-control" id="searchInput" placeholder="Search users by name..." onkeyup="filterUsers()">
+            <form method="GET" action="{{ url_for('admin_manage_users') }}" class="d-flex gap-2 mb-3">
+                <input type="text" name="search" class="form-control"
+                       placeholder="Search users by name..." value="{{ search or '' }}">
 
-                <select class="form-select" style="max-width: 200px;" name="status" id="statusFilter" onchange="filterUsers()">
-                    <option selected value="all">All</option>
-                    <option value="0">Active</option>
-                    <option value="1">Blacklisted</option>
+                <select class="form-select" style="max-width: 200px;" name="status" onchange="this.form.submit()">
+                    <option value="all" {% if not status or status == 'all' %}selected{% endif %}>All</option>
+                    <option value="0" {% if status == '0' %}selected{% endif %}>Active</option>
+                    <option value="1" {% if status == '1' %}selected{% endif %}>Blacklisted</option>
                 </select>
-            </div>
+
+                <button type="submit" class="btn btn-outline-primary">Search</button>
+                {% if search or (status and status != 'all') %}
+                    <a href="{{ url_for('admin_manage_users') }}" class="btn btn-outline-secondary">Clear</a>
+                {% endif %}
+            </form>
 
             <div class="card border-0 shadow-sm rounded-3">
                 <div class="card-body pt-3">
@@ -37,35 +43,31 @@
                         </thead>
 
                         <tbody>
-
                             {% for u in u_data %}
-                            {% if u.status == 0 %}
-                                <tr name="userRow" data-status="0" data-name="{{ u.name|lower }}">
+                                <tr>
                                     <td>{{ u.name }}</td>
                                     <td>{{ u.user_back.email }}</td>
                                     <td>{{ u.phone_number }}</td>
-                                    <td><span class="badge bg-success-subtle text-success">Active</span></td>
                                     <td>
-                                        <a href="/reject?user_id={{ u.user_id }}" class="btn btn-danger btn-sm">Deactivate</a>
+                                        {% if u.status == 0 %}
+                                            <span class="badge bg-success-subtle text-success">Active</span>
+                                        {% else %}
+                                            <span class="badge bg-danger-subtle text-danger">Blacklisted</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if u.status == 0 %}
+                                            <a href="/reject?user_id={{ u.user_id }}" class="btn btn-danger btn-sm">Deactivate</a>
+                                        {% else %}
+                                            <a href="/approve_user?user_id={{ u.user_id }}" class="btn btn-success btn-sm">Re-activate</a>
+                                        {% endif %}
                                     </td>
                                 </tr>
-                            {% endif %}
-                            {% endfor %}
-
-                            {% for u in u_data %}
-                            {% if u.status == 1 %}
-                                <tr name="userRow" data-status="1" data-name="{{ u.name|lower }}">
-                                    <td>{{ u.name }}</td>
-                                    <td>{{ u.user_back.email }}</td>
-                                    <td>{{ u.phone_number }}</td>
-                                    <td><span class="badge bg-danger-subtle text-danger">Blacklisted</span></td>
-                                    <td>
-                                        <a href="/approve_user?user_id={{ u.user_id }}" class="btn btn-success btn-sm">Re-activate</a>
-                                    </td>
+                            {% else %}
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted">No users found.</td>
                                 </tr>
-                            {% endif %}
                             {% endfor %}
-
                         </tbody>
                     </table>
 
@@ -75,28 +77,4 @@
         </div>
 
     </div>
-
-    <script>
-        function filterUsers() {
-            const statusValue = document.getElementById("statusFilter").value;
-            const searchValue = document.getElementById("searchInput").value.toLowerCase();
-            const rows = document.getElementsByName("userRow");
-
-            for (let i = 0; i < rows.length; i++) {
-                const rowStatus = rows[i].getAttribute("data-status");
-                const rowName = rows[i].getAttribute("data-name");
-
-                if (statusValue !== "all" && rowStatus !== statusValue) {
-                    rows[i].style.display = "none";
-                }
-                else if (searchValue !== "" && rowName.indexOf(searchValue) === -1) {
-                    rows[i].style.display = "none";
-                }
-                else {
-                    rows[i].style.display = "table-row";
-                }
-            }
-        }
-    </script>
-
 {% endblock %}

@@ -12,16 +12,22 @@
 
             <h3 class="mb-4">Staff Requests</h3>
 
-            <div class="d-flex gap-2 mb-3">
-                <input type="text" class="form-control" id="searchInput" placeholder="Search staff by name..." onkeyup="filterStaff()">
+            <form method="GET" action="{{ url_for('admin_manage_staffs') }}" class="d-flex gap-2 mb-3">
+                <input type="text" name="search" class="form-control"
+                       placeholder="Search staff by name..." value="{{ search or '' }}">
 
-                <select class="form-select" style="max-width: 200px;" name="status" onchange="showStaffDetails()">
-                    <option selected value="all">All</option>
-                    <option value="0">Pending</option>
-                    <option value="1">Approved</option>
-                    <option value="2">Blacklisted</option>
+                <select class="form-select" style="max-width: 200px;" name="status" onchange="this.form.submit()">
+                    <option value="all" {% if not status or status == 'all' %}selected{% endif %}>All</option>
+                    <option value="0" {% if status == '0' %}selected{% endif %}>Pending</option>
+                    <option value="1" {% if status == '1' %}selected{% endif %}>Approved</option>
+                    <option value="2" {% if status == '2' %}selected{% endif %}>Blacklisted</option>
                 </select>
-            </div>
+
+                <button type="submit" class="btn btn-outline-primary">Search</button>
+                {% if search or (status and status != 'all') %}
+                    <a href="{{ url_for('admin_manage_staffs') }}" class="btn btn-outline-secondary">Clear</a>
+                {% endif %}
+            </form>
 
             <div class="card border-0 shadow-sm rounded-3">
                 <div class="card-body pt-3">
@@ -40,56 +46,38 @@
                         </thead>
 
                         <tbody>
-
-                            {%for s in s_data %}
-                            {% if s.status == 0 %}
-                                <tr name="staffRow" data-status="0" data-name="{{ s.name|lower }}">
-                                    <td>{{s.staff_id}}</td>
-                                    <td>{{s.name}}</td>
-                                    <td>{{s.staff_back.email}}</td>
-                                    <td>{{s.experience}}</td>
-                                    <td>{{s.phone_number}}</td>
-                                    <td><span class="badge bg-secondary-subtle text-secondary">Pending</span></td>
+                            {% for s in s_data %}
+                                <tr>
+                                    <td>{{ s.staff_id }}</td>
+                                    <td>{{ s.name }}</td>
+                                    <td>{{ s.staff_back.email }}</td>
+                                    <td>{{ s.experience }}</td>
+                                    <td>{{ s.phone_number }}</td>
                                     <td>
-                                        <a href="/approve_staff?staff_id={{s.staff_id}}" class="btn btn-success btn-sm">Approve</a>
-                                        <a href="/blacklist_staff?staff_id={{s.staff_id}}" class="btn btn-danger btn-sm">Reject</a>
+                                        {% if s.status == 0 %}
+                                            <span class="badge bg-secondary-subtle text-secondary">Pending</span>
+                                        {% elif s.status == 1 %}
+                                            <span class="badge bg-success-subtle text-success">Approved</span>
+                                        {% else %}
+                                            <span class="badge bg-danger-subtle text-danger">Blacklisted</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if s.status == 0 %}
+                                            <a href="/approve_staff?staff_id={{ s.staff_id }}" class="btn btn-success btn-sm">Approve</a>
+                                            <a href="/blacklist_staff?staff_id={{ s.staff_id }}" class="btn btn-danger btn-sm">Reject</a>
+                                        {% elif s.status == 1 %}
+                                            <a href="/blacklist_staff?staff_id={{ s.staff_id }}" class="btn btn-outline-danger btn-sm">Blacklist</a>
+                                        {% else %}
+                                            <a href="/approve_staff?staff_id={{ s.staff_id }}" class="btn btn-success btn-sm">Approve</a>
+                                        {% endif %}
                                     </td>
                                 </tr>
-                            {% endif %}
-                            {%endfor%}
-
-                            {%for s in s_data %}
-                            {% if s.status == 1 %}
-                                <tr name="staffRow" data-status="1" data-name="{{ s.name|lower }}">
-                                    <td>{{s.staff_id}}</td>
-                                    <td>{{s.name}}</td>
-                                    <td>{{s.staff_back.email}}</td>
-                                    <td>{{s.experience}}</td>
-                                    <td>{{s.phone_number}}</td>
-                                    <td><span class="badge bg-success-subtle text-success">Approved</span></td>
-                                    <td>
-                                        <a href="/blacklist_staff?staff_id={{s.staff_id}}" class="btn btn-outline-danger btn-sm">Blacklist</a>
-                                    </td>
+                            {% else %}
+                                <tr>
+                                    <td colspan="7" class="text-center text-muted">No staff found.</td>
                                 </tr>
-                            {% endif %}
-                            {%endfor%}
-
-                            {%for s in s_data %}
-                            {% if s.status == 2 %}
-                                <tr name="staffRow" data-status="2" data-name="{{ s.name|lower }}">
-                                    <td>{{s.staff_id}}</td>
-                                    <td>{{s.name}}</td>
-                                    <td>{{s.staff_back.email}}</td>
-                                    <td>{{s.experience}}</td>
-                                    <td>{{s.phone_number}}</td>
-                                    <td><span class="badge bg-danger-subtle text-danger">Blacklisted</span></td>
-                                    <td>
-                                        <a href="/approve_staff?staff_id={{s.staff_id}}" class="btn btn-success btn-sm">Approve</a>
-                                    </td>
-                                </tr>
-                            {% endif %}
-                            {%endfor%}
-
+                            {% endfor %}
                         </tbody>
                     </table>
 
@@ -99,35 +87,4 @@
         </div>
 
     </div>
-
-    <script>
-        function showStaffDetails() {
-            const statusValue = document.getElementsByName("status")[0].value;
-            const rows = document.getElementsByName("staffRow");
-
-            for (let i = 0; i < rows.length; i++) {
-                const rowStatus = rows[i].getAttribute("data-status");
-                if (statusValue === "all" || rowStatus === statusValue) {
-                    rows[i].style.display = "table-row";
-                } else {
-                    rows[i].style.display = "none";
-                }
-            }
-        }
-
-        function filterStaff() {
-            const searchValue = document.getElementById("searchInput").value.toLowerCase();
-            const rows = document.getElementsByName("staffRow");
-
-            for (let i = 0; i < rows.length; i++) {
-                const rowName = rows[i].getAttribute("data-name");
-                if (searchValue !== "" && rowName.indexOf(searchValue) === -1) {
-                    rows[i].style.display = "none";
-                } else {
-                    rows[i].style.display = "table-row";
-                }
-            }
-        }
-    </script>
-
 {% endblock %}

@@ -15,10 +15,81 @@
 
     <div class="col-md-10">
 
-        <h2 class="mb-4">My Profile</h2>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="mb-0">My Profile</h2>
+
+            {% if not edit %}
+                <a href="{{ url_for('profile', user_id=user_id, staff_id=staff_id, edit=1) }}"
+                   class="btn btn-outline-primary btn-sm">
+                    <i class="bi bi-pencil-square"></i> Edit
+                </a>
+            {% endif %}
+        </div>
 
         <div class="card border-0 shadow-sm rounded-3">
             <div class="card-body">
+
+                {% if edit %}
+
+                <form method="POST" action="{{ url_for('update_profile') }}">
+
+                    <input type="hidden" name="role" value="{{ role }}">
+                    {% if role == "staff" %}
+                        <input type="hidden" name="staff_id" value="{{ staff_id }}">
+                    {% else %}
+                        <input type="hidden" name="user_id" value="{{ user_id }}">
+                    {% endif %}
+
+                    <table class="table table-borderless align-middle">
+
+                        <tr>
+                            <th width="20%">Name</th>
+                            <td>
+                                <input type="text" name="name" class="form-control" value="{{ name }}" required>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Email</th>
+                            <td>
+                                <input type="email" class="form-control" value="{{ email }}" readonly>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Phone Number</th>
+                            <td>
+                                <input type="text" name="phone" class="form-control" value="{{ phone }}" required>
+                            </td>
+                        </tr>
+
+                        {% if role == "staff" %}
+                        <tr>
+                            <th>Experience</th>
+                            <td>
+                                <input type="text" name="experience" class="form-control" value="{{ experience }}" required>
+                            </td>
+                        </tr>
+                        {% endif %}
+
+                        <tr>
+                            <th>Address</th>
+                            <td>
+                                <textarea name="address" class="form-control" rows="2" required>{{ address }}</textarea>
+                            </td>
+                        </tr>
+
+                    </table>
+
+                    <div class="text-end mt-3">
+                        <a href="{{ url_for('profile', user_id=user_id, staff_id=staff_id) }}"
+                           class="btn btn-outline-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+
+                </form>
+
+                {% else %}
 
                 <table class="table table-borderless">
 
@@ -31,7 +102,6 @@
                         <th>Email</th>
                         <td>{{ email }}</td>
                     </tr>
-
 
                     <tr>
                         <th>Phone Number</th>
@@ -51,6 +121,8 @@
                     </tr>
 
                 </table>
+
+                {% endif %}
 
             </div>
         </div>

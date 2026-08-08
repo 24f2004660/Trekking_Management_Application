@@ -77,6 +77,7 @@ def login():
 def profile():
     user_id = request.args.get("user_id")
     staff_id = request.args.get("staff_id")
+    edit = request.args.get("edit")
 
     if staff_id:
         role = "staff"
@@ -88,7 +89,7 @@ def profile():
         experience = s_profile.experience
         return render_template("profile.html", role=role, staff_id=staff_id,
                                 name=name, address=address, phone=phone,
-                                email=email, experience=experience)
+                                email=email, experience=experience, edit=edit)
     else:
         role = "user"
         u_profile = search_user(user_id)
@@ -98,7 +99,39 @@ def profile():
         email = u_profile.user_back.email
         return render_template("profile.html", role=role, user_id=user_id,
                                 name=name, address=address, phone=phone,
-                                email=email)
+                                email=email, edit=edit)
+
+
+@app.route("/update_profile", methods=["POST"])
+def update_profile():
+    role = request.form.get("role")
+    name = request.form.get("name")
+    phone = request.form.get("phone")
+    address = request.form.get("address")
+
+    if role == "staff":
+        staff_id = request.form.get("staff_id")
+        experience = request.form.get("experience")
+
+        profile = search_staff(staff_id)
+        profile.name = name
+        profile.phone_number = phone
+        profile.address = address
+        profile.experience = experience
+        db.session.commit()
+
+        return redirect(url_for("profile", staff_id=staff_id))
+
+    else:
+        user_id = request.form.get("user_id")
+
+        profile = search_user(user_id)
+        profile.name = name
+        profile.phone_number = phone
+        profile.address = address
+        db.session.commit()
+
+        return redirect(url_for("profile", user_id=user_id))
 
 #Admin
 @app.route("/admin")
@@ -153,14 +186,39 @@ def admin_manage_treks():
 
 @app.route("/manage_staffs")
 def admin_manage_staffs():
-    s_data = get_staff_data()
-    return render_template("Admin_templates/admin_manage_staffs.html", s_data=s_data)
+    search = request.args.get("search")
+    status = request.args.get("status")
+
+    query = db.session.query(staff_profile)
+
+    if search:
+        query = query.filter(staff_profile.name.like("%" + search + "%"))
+
+    if status and status != "all":
+        query = query.filter(staff_profile.status == int(status))
+
+    s_data = query.all()
+
+    return render_template("Admin_templates/admin_manage_staffs.html",
+                            s_data=s_data, search=search, status=status)
     
 @app.route("/manage_users")
 def admin_manage_users():
-    u_data = get_user_data()
+    search = request.args.get("search")
+    status = request.args.get("status")
 
-    return render_template("Admin_templates/admin_manage_users.html", u_data=u_data)
+    query = db.session.query(user_profile)
+
+    if search:
+        query = query.filter(user_profile.name.like("%" + search + "%"))
+
+    if status and status != "all":
+        query = query.filter(user_profile.status == int(status))
+
+    u_data = query.all()
+
+    return render_template("Admin_templates/admin_manage_users.html",
+                            u_data=u_data, search=search, status=status)
 
 @app.route("/reject", methods=["GET","POST"])
 def reject_user():
@@ -261,7 +319,26 @@ def delete_trek():
 @app.route("/user")
 def user_dashboard():
     user_id = request.args.get("user_id")
-    trek = get_trek_data()
+    search = request.args.get("search")
+    difficulty = request.args.get("difficulty")
+    location = request.args.get("location")
+
+    query = db.session.query(Trek).filter(Trek.status == "1")
+
+    if search:
+        query = query.filter(Trek.t_name.like("%" + search + "%"))
+
+    if difficulty and difficulty != "All":
+        query = query.filter(Trek.diff == difficulty)
+
+    if location and location != "All":
+        query = query.filter(Trek.location == location)
+
+    trek = query.all()
+
+    all_locations = db.session.query(Trek.location).distinct().all()
+    locations = [l[0] for l in all_locations]
+
     booked_trek_ids = get_user_booked_trek_ids(user_id) if user_id else []
     my_bookings = get_user_bookings(user_id) if user_id else []
 
@@ -274,7 +351,11 @@ def user_dashboard():
         user_id=user_id,
         booked_trek_ids=booked_trek_ids,
         my_bookings=my_bookings,
-        user_name = user_name[0]
+        user_name=user_name[0],
+        locations=locations,
+        search=search,
+        difficulty=difficulty,
+        location=location
     )
 
 
@@ -343,6 +424,7 @@ def staff_dashboard():
 def manage_trek():
     staff_id = request.args.get("staff_id")
     trek_id = request.args.get("trek_id")
+    search = request.args.get("search")
 
     trek = search_trek(trek_id)
 
@@ -352,17 +434,28 @@ def manage_trek():
             user = search_user(booking.user_id)
             participants.append({"name": user.name,"email": user.user_back.email,"booking_date": booking.booking_date,"status": booking.status})
 
-    return render_template("Staff_templates/staff_manage_trek.html",trek=trek,participants=participants ,staff_id = staff_id)
+    if search:
+        participants = [p for p in participants if search.lower() in p["name"].lower()]
+
+    return render_template("Staff_templates/staff_manage_trek.html",trek=trek,participants=participants ,staff_id = staff_id, search=search)
 
 @app.route("/staff_treks")
 def staff_my_treks():
     staff_id = request.args.get("staff_id")
-    assigned_treks = db.session.query(Trek).filter(Trek.assign_s_id == staff_id).all()
+    search = request.args.get("search")
+
+    query = db.session.query(Trek).filter(Trek.assign_s_id == staff_id)
+
+    if search:
+        query = query.filter(Trek.t_name.like("%" + search + "%"))
+
+    assigned_treks = query.all()
 
     return render_template(
         "Staff_templates/staff_my_treks.html",
         assigned_treks=assigned_treks,
-        staff_id=staff_id
+        staff_id=staff_id,
+        search=search
     )
 
 @app.route("/reset_trek_slots")
@@ -380,6 +473,8 @@ def reset_trek_slots():
 @app.route("/staff_participants")
 def staff_participants():
     staff_id = request.args.get("staff_id")
+    search = request.args.get("search")
+    status = request.args.get("status")
 
     all_bookings = (
         db.session.query(Booking)
@@ -400,10 +495,22 @@ def staff_participants():
             "status": booking.status
         })
 
+    if search:
+        search_lower = search.lower()
+        participants = [
+            p for p in participants
+            if search_lower in p["name"].lower() or search_lower in p["trek_name"].lower()
+        ]
+
+    if status and status != "all":
+        participants = [p for p in participants if p["status"] == status]
+
     return render_template(
         "Staff_templates/staff_participants.html",
         participants=participants,
-        staff_id=staff_id
+        staff_id=staff_id,
+        search=search,
+        status=status
     )
 
 @app.route("/update_trek_slots", methods=["POST"])

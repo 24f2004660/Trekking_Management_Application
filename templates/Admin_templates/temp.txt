@@ -1,8 +1,7 @@
-<nav class="navbar navbar-expand-lg bg-white border-bottom">
-    <div class="container-fluid">
-        <a class="navbar-brand fw-bold" href="#">
-            Trekking Management Application
-        </a>
+password input length
 
-        
-</nav>
+js -- query for search bar
+
+admin_edt 88
+
+ORM over DBMS

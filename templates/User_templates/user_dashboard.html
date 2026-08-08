@@ -19,23 +19,31 @@
                 <div class="card-header bg-white border-0 pt-3 d-flex justify-content-between align-items-center">
                     <span class="fw-bold">Available Treks</span>
 
-                    <div class="d-flex gap-2">
-                        <input type="text" class="form-control form-control-sm" id="searchInput" placeholder="Search treks by name..." style="width: 200px;" onkeyup="filterTreks()">
-                        <select class="form-select form-select-sm" style="width: auto;" id="diffFilter" name="difficulty" onchange="filterTreks()">
-                            <option selected value="All">Difficulty: All</option>
-                            <option value="E">Easy</option>
-                            <option value="M">Moderate</option>
-                            <option value="H">Hard</option>
+                    <form method="GET" action="{{ url_for('user_dashboard') }}" class="d-flex gap-2">
+                        <input type="hidden" name="user_id" value="{{ user_id }}">
+
+                        <input type="text" name="search" class="form-control form-control-sm"
+                               placeholder="Search treks by name..." style="width: 200px;" value="{{ search or '' }}">
+
+                        <select class="form-select form-select-sm" style="width: auto;" name="difficulty" onchange="this.form.submit()">
+                            <option value="All" {% if not difficulty or difficulty == 'All' %}selected{% endif %}>Difficulty: All</option>
+                            <option value="E" {% if difficulty == 'E' %}selected{% endif %}>Easy</option>
+                            <option value="M" {% if difficulty == 'M' %}selected{% endif %}>Moderate</option>
+                            <option value="H" {% if difficulty == 'H' %}selected{% endif %}>Hard</option>
                         </select>
 
-                        <select class="form-select form-select-sm" style="width: auto;" id="locationFilter" onchange="filterTreks()">
-                            <option selected value="All">Location: All</option>
-                            {% for t in trek %}
-                            
-                            <option value="{{t.location}}">{{t.location}}</option>
+                        <select class="form-select form-select-sm" style="width: auto;" name="location" onchange="this.form.submit()">
+                            <option value="All" {% if not location or location == 'All' %}selected{% endif %}>Location: All</option>
+                            {% for loc in locations %}
+                            <option value="{{ loc }}" {% if location == loc %}selected{% endif %}>{{ loc }}</option>
                             {% endfor %}
                         </select>
-                    </div>
+
+                        <button type="submit" class="btn btn-outline-primary btn-sm">Search</button>
+                        {% if search or (difficulty and difficulty != 'All') or (location and location != 'All') %}
+                            <a href="{{ url_for('user_dashboard', user_id=user_id) }}" class="btn btn-outline-secondary btn-sm">Clear</a>
+                        {% endif %}
+                    </form>
                 </div>
 
                 <div class="card-body pt-0">
@@ -54,8 +62,7 @@
 
                         <tbody>
                             {% for t in trek %}
-                                {% if t.status == "1" %}
-                                <tr name="trekRow" data-diff="{{ t.diff }}" data-location="{{ t.location }}" data-name="{{ t.t_name|lower }}">
+                                <tr>
                                     <td>{{ t.t_name }}</td>
                                     <td>{{ t.location }}</td>
                                     <td>
@@ -73,7 +80,10 @@
                                         {% endif %}
                                     </td>
                                 </tr>
-                                {% endif %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted">No treks found.</td>
+                                </tr>
                             {% endfor %}
                         </tbody>
                     </table>
@@ -124,34 +134,5 @@
         </div>
 
     </div>
-
-<script>
-    function filterTreks() {
-        const diffValue = document.getElementById("diffFilter").value;
-        const locationValue = document.getElementById("locationFilter").value;
-        const searchValue = document.getElementById("searchInput").value.toLowerCase();
-        const rows = document.getElementsByName("trekRow");
-
-        for (let i = 0; i < rows.length; i++) {
-
-            const rowDiff = rows[i].getAttribute("data-diff");
-            const rowLocation = rows[i].getAttribute("data-location");
-            const rowName = rows[i].getAttribute("data-name");
-
-            if (diffValue !== "All" && rowDiff !== diffValue) {
-                rows[i].style.display = "none";
-            }
-            else if (locationValue !== "All" && rowLocation !== locationValue) {
-                rows[i].style.display = "none";
-            }
-            else if (searchValue !== "" && rowName.indexOf(searchValue) === -1) {
-                rows[i].style.display = "none";
-            }
-            else {
-                rows[i].style.display = "table-row";
-            }
-        }
-    }
-</script>
 
 {% endblock %}

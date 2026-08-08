@@ -12,6 +12,25 @@
 
         <h2 class="mb-4">Participants</h2>
 
+        <form method="GET" action="{{ url_for('staff_participants') }}" class="d-flex gap-2 mb-3">
+            <input type="hidden" name="staff_id" value="{{ staff_id }}">
+            <input type="text" name="search" class="form-control"
+                   placeholder="Search by name or trek..." value="{{ search or '' }}">
+
+            <select class="form-select" style="max-width: 200px;" name="status" onchange="this.form.submit()">
+                <option value="all" {% if not status or status == 'all' %}selected{% endif %}>All</option>
+                <option value="Booked" {% if status == 'Booked' %}selected{% endif %}>Booked</option>
+                <option value="Cancelled" {% if status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                <option value="Completed" {% if status == 'Completed' %}selected{% endif %}>Completed</option>
+            </select>
+
+            <button type="submit" class="btn btn-outline-primary">Search</button>
+            {% if search or (status and status != 'all') %}
+                <a href="{{ url_for('staff_participants', staff_id=staff_id) }}"
+                   class="btn btn-outline-secondary">Clear</a>
+            {% endif %}
+        </form>
+
         <div class="card border-0 shadow-sm rounded-3">
 
             <div class="card-header bg-white fw-bold border-0 pt-3">
@@ -49,7 +68,7 @@
                             </td>
                         </tr>
                         {% else %}
-                        <tr><td colspan="5" class="text-muted">No participants yet.</td></tr>
+                        <tr><td colspan="5" class="text-muted">No participants found.</td></tr>
                         {% endfor %}
                     </tbody>
 

@@ -12,6 +12,17 @@
 
         <h2 class="mb-4">My Treks</h2>
 
+        <form method="GET" action="{{ url_for('staff_my_treks') }}" class="d-flex gap-2 mb-4">
+            <input type="hidden" name="staff_id" value="{{ staff_id }}">
+            <input type="text" name="search" class="form-control"
+                   placeholder="Search treks by name..." value="{{ search or '' }}">
+            <button type="submit" class="btn btn-outline-primary">Search</button>
+            {% if search %}
+                <a href="{{ url_for('staff_my_treks', staff_id=staff_id) }}"
+                   class="btn btn-outline-secondary">Clear</a>
+            {% endif %}
+        </form>
+
         <div class="row g-4">
 
             {% for trek in assigned_treks %}
@@ -44,7 +55,9 @@
                 </div>
             </div>
             {% else %}
-            <p class="text-muted">No treks assigned yet.</p>
+            <p class="text-muted">
+                {% if search %}No treks match "{{ search }}".{% else %}No treks assigned yet.{% endif %}
+            </p>
             {% endfor %}
 
         </div>
