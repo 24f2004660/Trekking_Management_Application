@@ -44,8 +44,8 @@
             Dashboard
         </a>
 
-        <a href="history.html"
-           class="nav-link {% if current_page == 'history' %}active{% endif %}">
+        <a href="{{ url_for('user_history', user_id=user_id) }}"
+        class="nav-link {% if current_page == 'history' %}active{% endif %}">
             <i class="bi bi-clock-history"></i>
             History
         </a>

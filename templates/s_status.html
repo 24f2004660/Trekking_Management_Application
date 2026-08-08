@@ -3,10 +3,11 @@
 <center>
     <h1>
         {% if status== "Pending" %}
-            Account Registered, Approval Pending by Admin!
+            <span style="color: greenyellow;">Account Registered</span>,<span style="color: gold;">Approval Pending by Admin!</span> 
         {% else %}
-            Account deactivated by Admin!
+            Account <span style="color: #dc3545;">deactivated</span> by Admin!
         {% endif %}
     </h1>
+    
 </center>
 {% endblock %}

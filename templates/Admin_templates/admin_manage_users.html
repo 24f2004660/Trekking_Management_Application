@@ -12,91 +12,64 @@
 
             <h3 class="mb-4">Registered Users</h3>
 
-            <div class="mb-3">
-                <select class="form-select" name="status" onchange="showStaffDetails()">
-                    <option selected value = 0>Active</option>
+            <div class="d-flex gap-2 mb-3">
+                <input type="text" class="form-control" id="searchInput" placeholder="Search users by name..." onkeyup="filterUsers()">
+
+                <select class="form-select" style="max-width: 200px;" name="status" id="statusFilter" onchange="filterUsers()">
+                    <option selected value="all">All</option>
+                    <option value="0">Active</option>
                     <option value="1">Blacklisted</option>
                 </select>
             </div>
 
-            <div id="staffRequestTabsContent">
+            <div class="card border-0 shadow-sm rounded-3">
+                <div class="card-body pt-3">
 
-                <!-- Active -->
-                <div id="active" style="display: block;">                  
-                    <div class="card border-0 shadow-sm rounded-3">
-                        <div class="card-body pt-3">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Contact</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
 
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Contact</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
+                        <tbody>
 
-                                <tbody>
-                                    {%for u in u_data %}
-                                    {% if u.status == 0 %}
-                                        <tr>
-                                            <td>{{u.name}}</td>
-                                            <td>{{u.user_back.email}}</td>
-                                            <td>{{u.phone_number}}</td>
-                                            <td>
-                                                <a href="/reject?user_id={{ u.user_id }}"
-                                                class="btn btn-danger btn-sm">
-                                                    Deactivate
-                                                </a>
-                                            </td>
-                                        
-                                        </tr>
-                                    {% endif %}
-                                    {%endfor%}
+                            {% for u in u_data %}
+                            {% if u.status == 0 %}
+                                <tr name="userRow" data-status="0" data-name="{{ u.name|lower }}">
+                                    <td>{{ u.name }}</td>
+                                    <td>{{ u.user_back.email }}</td>
+                                    <td>{{ u.phone_number }}</td>
+                                    <td><span class="badge bg-success-subtle text-success">Active</span></td>
+                                    <td>
+                                        <a href="/reject?user_id={{ u.user_id }}" class="btn btn-danger btn-sm">Deactivate</a>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                            {% endfor %}
 
-                                </tbody>
-                            </table>
+                            {% for u in u_data %}
+                            {% if u.status == 1 %}
+                                <tr name="userRow" data-status="1" data-name="{{ u.name|lower }}">
+                                    <td>{{ u.name }}</td>
+                                    <td>{{ u.user_back.email }}</td>
+                                    <td>{{ u.phone_number }}</td>
+                                    <td><span class="badge bg-danger-subtle text-danger">Blacklisted</span></td>
+                                    <td>
+                                        <a href="/approve_user?user_id={{ u.user_id }}" class="btn btn-success btn-sm">Re-activate</a>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                            {% endfor %}
 
-                        </div>
-                    </div>
+                        </tbody>
+                    </table>
+
                 </div>
-
-
-                <!-- Blacklisted -->
-                <div id="blacklisted" style="display: none;">
-                    <div class="card border-0 shadow-sm rounded-3">
-                        <div class="card-body pt-3">
-
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Contact</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    {%for u in u_data %}
-                                    {% if u.status == 1 %}
-                                        <tr>
-                                            <td>{{u.name}}</td>
-                                            <td>{{u.user_back.email}}</td>
-                                            <td>{{u.phone_number}}</td>
-                                            <td><a href="/approve_user?user_id={{u.user_id}}" class="btn btn-success btn-sm" >Re-activate</a></td>
-                                            
-                                        </tr>
-                                    {% endif %}
-                                    {%endfor%}
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                        </div>
-                    </div>
-                </div>
-
             </div>
 
         </div>
@@ -104,17 +77,24 @@
     </div>
 
     <script>
-        function showStaffDetails() {
-            const status = document.getElementsByName("status")[0];
-            const active = document.getElementById("active");
-            const blacklisted = document.getElementById("blacklisted");
+        function filterUsers() {
+            const statusValue = document.getElementById("statusFilter").value;
+            const searchValue = document.getElementById("searchInput").value.toLowerCase();
+            const rows = document.getElementsByName("userRow");
 
-            if (status.value === "1") {
-                active.style.display = "none";
-                blacklisted.style.display = "block";
-            } else {
-                active.style.display = "block";
-                blacklisted.style.display = "none";
+            for (let i = 0; i < rows.length; i++) {
+                const rowStatus = rows[i].getAttribute("data-status");
+                const rowName = rows[i].getAttribute("data-name");
+
+                if (statusValue !== "all" && rowStatus !== statusValue) {
+                    rows[i].style.display = "none";
+                }
+                else if (searchValue !== "" && rowName.indexOf(searchValue) === -1) {
+                    rows[i].style.display = "none";
+                }
+                else {
+                    rows[i].style.display = "table-row";
+                }
             }
         }
     </script>

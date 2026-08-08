@@ -257,7 +257,6 @@ def delete_trek():
 
     return redirect(url_for("admin_manage_treks"))
 
-            
 #User
 @app.route("/user")
 def user_dashboard():
@@ -265,12 +264,17 @@ def user_dashboard():
     trek = get_trek_data()
     booked_trek_ids = get_user_booked_trek_ids(user_id) if user_id else []
     my_bookings = get_user_bookings(user_id) if user_id else []
+
+    user_p = search_user(user_id)
+    user_name = (user_p.name).split()
+
     return render_template(
         "User_templates/user_dashboard.html",
         trek=trek,
         user_id=user_id,
         booked_trek_ids=booked_trek_ids,
-        my_bookings=my_bookings
+        my_bookings=my_bookings,
+        user_name = user_name[0]
     )
 
 
@@ -293,10 +297,23 @@ def user_booking():
 
     return redirect(url_for("user_dashboard", user_id=user_id))
 
+@app.route("/user_history")
+def user_history():
+    user_id = request.args.get("user_id")
+    history = get_user_completed_treks(user_id) if user_id else []
+    return render_template(
+        "User_templates/user_history.html",
+        history=history,
+        user_id=user_id
+    )
+
 #satff
 @app.route("/staff")
 def staff_dashboard():
     staff_id = request.args.get("staff_id")
+
+    get_staff =search_staff(staff_id)
+    staff_name = (get_staff.name).split()
 
     assigned_treks = db.session.query(Trek).filter(Trek.assign_s_id == staff_id).all()
     assigned_trek = db.session.query(Trek).filter(Trek.assign_s_id == staff_id).count()
@@ -318,7 +335,8 @@ def staff_dashboard():
         participants=participants,
         assigned_treks=assigned_treks,
         staff_id=staff_id,
-        trek_participant_counts=trek_participant_counts
+        trek_participant_counts=trek_participant_counts,
+        staff_name = staff_name[0]
     )
 
 @app.route("/s_manage_trek")
@@ -465,5 +483,23 @@ def get_user_bookings(user_id):
             "trek_name": trek.t_name ,
             "booking_date": b.booking_date,
             "status": b.status
+        })
+    return result
+
+def get_user_completed_treks(user_id):
+    bookings = (
+        db.session.query(Booking)
+        .filter(Booking.user_id == user_id, Booking.status == "Completed")
+        .all()
+    )
+    result = []
+    for b in bookings:
+        trek = search_trek(b.trek_id)
+        result.append({
+            "trek_name": trek.t_name,
+            "location": trek.location,
+            "start_date": trek.start_date,
+            "end_date": trek.end_date,
+            "booking_date": b.booking_date,
         })
     return result

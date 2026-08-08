@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% set current_user = 'User' %}
+{% block content %}
+    <div class="row">
+
+        <!-- Sidebar -->
+        {% set current_page = "history" %}
+        {% include "User_templates/components/user_menu.html" %}
+
+        <!-- Main Content -->
+        <div class="col-md-10">
+
+            <h3 class="mb-1">Trek History</h3>
+            <p class="text-muted mb-4">Your completed treks, past and done.</p>
+
+            <div class="card border-0 shadow-sm rounded-3">
+
+                <div class="card-header bg-white fw-bold border-0 pt-3">
+                    Completed Treks
+                </div>
+
+                <div class="card-body pt-0">
+
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Trek Name</th>
+                                <th>Location</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Booked On</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for h in history %}
+                                <tr>
+                                    <td>{{ h.trek_name }}</td>
+                                    <td>{{ h.location }}</td>
+                                    <td>{{ h.start_date.strftime('%d %b %Y') if h.start_date else '-' }}</td>
+                                    <td>{{ h.end_date.strftime('%d %b %Y') if h.end_date else '-' }}</td>
+                                    <td>{{ h.booking_date.strftime('%d %b %Y') if h.booking_date else '-' }}</td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted py-4">No completed treks yet.</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}

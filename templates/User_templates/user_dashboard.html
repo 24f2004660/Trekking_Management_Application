@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% set current_user = 'User' %}
+{% set current_user = user_name %}
 {% block content %}
     <div class="row">
 
@@ -10,7 +10,7 @@
         <!-- Main Content -->
         <div class="col-md-10">
 
-            <h3 class="mb-1">Welcome, {{ current_user }}!</h3>
+            <h3 class="mb-1">Welcome, {{ user_name }}!</h3>
             <p class="text-muted mb-4">Here's what's happening with your treks.</p>
 
             <!-- Available Treks -->
