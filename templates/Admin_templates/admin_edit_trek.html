@@ -53,9 +53,15 @@
                                 <input type="number" class="form-control" name="duration" value="{{trek_data.duration}}" required>
                             </div>
 
-                            <div class="mb-3">
-                                <label class="form-label">Available Slots</label>
-                                <input type="number" class="form-control" name="avl_slots" value="{{trek_data.avl_slots}}" required>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Total Slots</label>
+                                    <input type="number" class="form-control" name="total_slots" value="{{trek_data.total_slots}}" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Available Slots</label>
+                                    <input type="number" class="form-control" name="avl_slots" value="{{trek_data.avl_slots}}" required>
+                                </div>
                             </div>
 
                         </div>
@@ -78,9 +84,11 @@
                                 <select class="form-select" name="asn_staff" required>
                                     <option disabled>Select Staff</option>
                                     {% for staff in staffs %}
-                                        <option value="{{ staff.id }}" {% if trek_data.assign_s_id == staff.id %}selected{% endif %}>
+                                    {% if staff.status == 1 %}
+                                        <option value="{{ staff.staff_id }}" {% if trek_data.assign_s_id == staff.staff_id %}selected{% endif %}>
                                             {{ staff.name }}
                                         </option>
+                                    {% endif %}
                                     {% endfor %}
                                 </select>
                             </div>

@@ -38,25 +38,25 @@
 
     <nav class="nav flex-column">
 
-        <a href="{{ url_for('staff_dashboard') }}"
-           class="nav-link {% if current_page == 'dashboard' %}active{% endif %}">
+        <a href="{{ url_for('staff_dashboard', staff_id=staff_id) }}"
+        class="nav-link {% if current_page == 'dashboard' %}active{% endif %}">
             <i class="bi bi-speedometer2"></i>
             Dashboard
         </a>
 
-        <a href="my_treks.html"
-           class="nav-link {% if current_page == 'my_treks' %}active{% endif %}">
+        <a href="{{ url_for('staff_my_treks', staff_id=staff_id) }}"
+        class="nav-link {% if current_page == 'my_treks' %}active{% endif %}">
             <i class="bi bi-map"></i>
             My Treks
         </a>
 
-        <a href="participants.html"
-           class="nav-link {% if current_page == 'participants' %}active{% endif %}">
+        <a href="{{ url_for('staff_participants', staff_id=staff_id) }}"
+        class="nav-link {% if current_page == 'participants' %}active{% endif %}">
             <i class="bi bi-people"></i>
             Participants
         </a>
 
-        <a href="profile.html"
+        <a href="{{ url_for('profile', staff_id=staff_id) }}"
            class="nav-link {% if current_page == 'profile' %}active{% endif %}">
             <i class="bi bi-person"></i>
             Profile

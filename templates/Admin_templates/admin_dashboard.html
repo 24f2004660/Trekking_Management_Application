@@ -65,7 +65,7 @@
                         <div class="card-body d-flex justify-content-between align-items-center p-4">
                             <div>
                                 <small class="text-muted">Total Bookings</small>
-                                <h3 class="fw-bold mb-0">XX</h3>
+                                <h3 class="fw-bold mb-0">{{b_count}}</h3>
                             </div>
                             <div class="bg-light rounded-circle d-flex align-items-center justify-content-center"
                                 style="width:50px; height:50px;">
@@ -81,7 +81,7 @@
             <div class="card mt-4 border-0 shadow-sm rounded-3">
 
                 <div class="card-header bg-white fw-bold border-0 pt-3">
-                    Recent Bookings
+                    Bookings
                 </div>
 
                 <div class="card-body pt-0">
@@ -94,35 +94,40 @@
                                 <th>Trek</th>
                                 <th>Booking Date</th>
                                 <th>Status</th>
+                                <th>Action</th>
+
                             </tr>
                         </thead>
 
                         <tbody>
                             {% for booking in bookings %}
                             <tr>
-                                <td>{{ booking.b_id }}</td>
-                                <td>{{ booking.name }}</td>
-                                <td>{{ booking.Trek }}</td>
-                                <td>{{ booking.date }}</td>
+                                <td>{{ booking.booking_id }}</td>
+                                <td>{{ booking.trekker.name }}</td>
+                                <td>{{ booking.trek.t_name }}</td>
+                                <td>{{ booking.booking_date }}</td>
                                 <td>
-                                    {% if booking.status == 'booked' %}
+                                    {% if booking.status == 'Booked' %}
                                     <span class="badge bg-success-subtle text-success">Booked</span>
-                                    {% elif booking.status == 'cancelled' %}
+                                    {% elif booking.status == 'Cancelled' %}
                                     <span class="badge bg-danger-subtle text-danger">Cancelled</span>
                                     {% else %}
                                     <span class="badge bg-secondary-subtle text-secondary">{{ booking.status }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if booking.status == 'Booked' %}
+                                    <a href="/cancel_booking?booking_id={{booking.booking_id}}" class="btn btn-danger btn-sm" >Cancel</a>
+                                    {% elif booking.status == 'Cancelled' %}
+                                    <span class="badge bg-danger-subtle text-danger">Cancelled</span>
+                                    {% else %}
+                                    <span class="badge bg-secondary-subtle text-secondary">Completed</span>
                                     {% endif %}
                                 </td>
                             </tr>
                             {% endfor %}
                         </tbody>
                     </table>
-
-                    <div class="text-end mt-3">
-                        <a href="#" class="text-decoration-none">
-                            View All Bookings →
-                        </a>
-                    </div>
 
                 </div>
 

@@ -16,7 +16,7 @@
 
                 <!-- Search -->
                 <div class="mb-3">
-                    <input type="text" class="form-control" placeholder="Search Treks...">
+                    <input type="text" class="form-control" id="searchInput" placeholder="Search Treks..." onkeyup="filterTreks()">
                 </div>
 
                 <!-- Table -->
@@ -28,7 +28,8 @@
                             <th>Trek Name</th>
                             <th>Location</th>
                             <th>Difficulty</th>
-                            <th>Slots</th>
+                            <th>Total Slots</th>
+                            <th>Available Slots</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
@@ -36,18 +37,33 @@
 
                     <tbody>
                         {% for trek in treks %}
-                        <tr>
+                        <tr name="trekRow" data-name="{{ trek.t_name|lower }}">
                             <td>{{ trek.trek_id }}</td>
                             <td>{{ trek.t_name }}</td>
                             <td>{{ trek.location }}</td>
-                            <td>{{ trek.diff }}</td>
+                            <td>
+                                {% if trek.diff == 'E' %}
+                                    <span>Easy</span>
+                                {% elif trek.diff == 'M' %}
+                                    <span>Moderate</span>
+                                {% else %}
+                                    <span>Hard</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ trek.total_slots }}</td>
                             <td>{{ trek.avl_slots }}</td>
-                            <td>{{ trek.status }}</td>
+                            <td>
+                                {% if trek.status == '1' %}
+                                    <span class="badge bg-success">Open</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Closed</span>
+                                {% endif %}
+                            </td>
                             <td>
                                 <a href="/edit_trek?trek_id={{ trek.trek_id }}" class="btn" >
                                     <i class="bi bi-pencil-square me-2"></i>
                                 </a>
-                                <a href="#" class="btn">
+                                <a href="/delete_trek?trek_id={{ trek.trek_id }}" class="btn">
                                     <i class="bi bi-trash"></i>
                                 </a>
                             </td>
@@ -60,4 +76,22 @@
 
             </div>
         </div>
+
+<script>
+    function filterTreks() {
+        const searchValue = document.getElementById("searchInput").value.toLowerCase();
+        const rows = document.getElementsByName("trekRow");
+
+        for (let i = 0; i < rows.length; i++) {
+            const rowName = rows[i].getAttribute("data-name");
+
+            if (searchValue !== "" && rowName.indexOf(searchValue) === -1) {
+                rows[i].style.display = "none";
+            } else {
+                rows[i].style.display = "table-row";
+            }
+        }
+    }
+</script>
+
 {% endblock %}

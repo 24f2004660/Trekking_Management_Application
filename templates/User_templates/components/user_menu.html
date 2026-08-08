@@ -38,22 +38,10 @@
 
     <nav class="nav flex-column">
 
-        <a href="{{ url_for('user_dashboard') }}"
-           class="nav-link {% if current_page == 'dashboard' %}active{% endif %}">
+        <a href="{{ url_for('user_dashboard', user_id=user_id) }}"
+        class="nav-link {% if current_page == 'dashboard' %}active{% endif %}">
             <i class="bi bi-speedometer2"></i>
             Dashboard
-        </a>
-
-        <a href="browse_treks.html"
-           class="nav-link {% if current_page == 'browse_treks' %}active{% endif %}">
-            <i class="bi bi-map"></i>
-            Browse Treks
-        </a>
-
-        <a href="my_bookings.html"
-           class="nav-link {% if current_page == 'my_bookings' %}active{% endif %}">
-            <i class="bi bi-calendar-check"></i>
-            My Bookings
         </a>
 
         <a href="history.html"
@@ -62,13 +50,13 @@
             History
         </a>
 
-        <a href="profile.html"
+        <a href="{{ url_for('profile', user_id=user_id) }}"
            class="nav-link {% if current_page == 'profile' %}active{% endif %}">
             <i class="bi bi-person"></i>
             Profile
         </a>
 
-        <a href="../homepage.html"
+        <a href="{{url_for('login')}}"
            class="nav-link text-danger">
             <i class="bi bi-box-arrow-right"></i>
             Logout

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% set current_user = 'Anupam Dhoni' %}
+{% set current_user = 'Staff' %}
 {% block content %}
     <div class="row">
 
@@ -20,7 +20,7 @@
                         <div class="card-body d-flex justify-content-between align-items-center">
                             <div>
                                 <p class="text-muted mb-1">Assigned Treks</p>
-                                <h3 class="fw-bold mb-0">3</h3>
+                                <h3 class="fw-bold mb-0">{{a_trek_count}}</h3>
                             </div>
                             <div class="bg-light rounded-3 d-flex align-items-center justify-content-center"
                                  style="width: 48px; height: 48px;">
@@ -35,7 +35,7 @@
                         <div class="card-body d-flex justify-content-between align-items-center">
                             <div>
                                 <p class="text-muted mb-1">Total Participants</p>
-                                <h3 class="fw-bold mb-0">32</h3>
+                                <h3 class="fw-bold mb-0">{{participants}}</h3>
                             </div>
                             <div class="bg-light rounded-3 d-flex align-items-center justify-content-center"
                                  style="width: 48px; height: 48px;">
@@ -50,7 +50,7 @@
                         <div class="card-body d-flex justify-content-between align-items-center">
                             <div>
                                 <p class="text-muted mb-1">Open Treks</p>
-                                <h3 class="fw-bold mb-0">2</h3>
+                                <h3 class="fw-bold mb-0">{{open_trek}}</h3>
                             </div>
                             <div class="bg-light rounded-3 d-flex align-items-center justify-content-center"
                                  style="width: 48px; height: 48px;">
@@ -84,43 +84,30 @@
                         </thead>
 
                         <tbody>
+                            {% for trek in assigned_treks %}
                             <tr>
-                                <td>Everest Base Camp</td>
-                                <td>Nepal</td>
-                                <td>12</td>
-                                <td>10</td>
+                                <td>{{ trek.t_name }}</td>
+                                <td>{{ trek.location }}</td>
+
+                                <td>{{ trek_participant_counts[trek.trek_id] }}</td>
+
+                                <td>{{ trek.avl_slots }}/{{ trek.total_slots }}</td>
+
                                 <td>
-                                    <span class="badge bg-success-subtle text-success">Open</span>
+                                    {% if trek.status == "1" %}
+                                        <span class="badge bg-success-subtle text-success">Open</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary-subtle text-secondary">Closed</span>
+                                    {% endif %}
                                 </td>
+
                                 <td>
-                                    <a href="#" class="btn btn-primary btn-sm">Manage</a>
+                                    <a href="{{ url_for('manage_trek', trek_id=trek.trek_id, staff_id=staff_id) }}" class="btn btn-primary btn-sm" >Manage</a>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>Roopkund Trek</td>
-                                <td>Uttarakhand</td>
-                                <td>8</td>
-                                <td>15</td>
-                                <td>
-                                    <span class="badge bg-success-subtle text-success">Open</span>
-                                </td>
-                                <td>
-                                    <a href="#" class="btn btn-primary btn-sm">Manage</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Kedarkantha Trek</td>
-                                <td>Uttarakhand</td>
-                                <td>12</td>
-                                <td>20</td>
-                                <td>
-                                    <span class="badge bg-secondary-subtle text-secondary">Closed</span>
-                                </td>
-                                <td>
-                                    <a href="#" class="btn btn-primary btn-sm">Manage</a>
-                                </td>
-                            </tr>
+                            {% endfor %}
                         </tbody>
+                            
                     </table>
 
                 </div>

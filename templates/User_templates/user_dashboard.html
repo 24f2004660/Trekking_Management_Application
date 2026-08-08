@@ -20,18 +20,20 @@
                     <span class="fw-bold">Available Treks</span>
 
                     <div class="d-flex gap-2">
-                        <select class="form-select form-select-sm" style="width: auto;">
-                            <option selected>Difficulty: All</option>
-                            <option>Easy</option>
-                            <option>Moderate</option>
-                            <option>Hard</option>
+                        <input type="text" class="form-control form-control-sm" id="searchInput" placeholder="Search treks by name..." style="width: 200px;" onkeyup="filterTreks()">
+                        <select class="form-select form-select-sm" style="width: auto;" id="diffFilter" name="difficulty" onchange="filterTreks()">
+                            <option selected value="All">Difficulty: All</option>
+                            <option value="E">Easy</option>
+                            <option value="M">Moderate</option>
+                            <option value="H">Hard</option>
                         </select>
 
-                        <select class="form-select form-select-sm" style="width: auto;">
-                            <option selected>Location: All</option>
-                            <option>Nepal</option>
-                            <option>Uttarakhand</option>
-                            <option>Himachal</option>
+                        <select class="form-select form-select-sm" style="width: auto;" id="locationFilter" onchange="filterTreks()">
+                            <option selected value="All">Location: All</option>
+                            {% for t in trek %}
+                            
+                            <option value="{{t.location}}">{{t.location}}</option>
+                            {% endfor %}
                         </select>
                     </div>
                 </div>
@@ -51,36 +53,28 @@
                         </thead>
 
                         <tbody>
-                            <tr>
-                                <td>Everest Base Camp</td>
-                                <td>Nepal</td>
-                                <td>Hard</td>
-                                <td>12 Days</td>
-                                <td>10</td>
-                                <td>
-                                    <a href="#" class="btn btn-primary btn-sm">Book Now</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Roopkund Trek</td>
-                                <td>Uttarakhand</td>
-                                <td>Moderate</td>
-                                <td>7 Days</td>
-                                <td>7</td>
-                                <td>
-                                    <a href="#" class="btn btn-primary btn-sm">Book Now</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Hampta Pass</td>
-                                <td>Himachal</td>
-                                <td>Moderate</td>
-                                <td>5 Days</td>
-                                <td>8</td>
-                                <td>
-                                    <a href="#" class="btn btn-primary btn-sm">Book Now</a>
-                                </td>
-                            </tr>
+                            {% for t in trek %}
+                                {% if t.status == "1" %}
+                                <tr name="trekRow" data-diff="{{ t.diff }}" data-location="{{ t.location }}" data-name="{{ t.t_name|lower }}">
+                                    <td>{{ t.t_name }}</td>
+                                    <td>{{ t.location }}</td>
+                                    <td>
+                                        {% if t.diff == 'E' %}Easy{% elif t.diff == 'M' %}Moderate{% else %}Hard{% endif %}
+                                    </td>
+                                    <td>{{ t.duration }} Days</td>
+                                    <td>{{ t.avl_slots }}</td>
+                                    <td>
+                                        {% if t.trek_id in booked_trek_ids %}
+                                            <span class="badge bg-success-subtle text-success">Booked</span>
+                                        {% elif t.avl_slots <= 0 %}
+                                            <span class="badge bg-secondary-subtle text-secondary">Booking closed</span>
+                                        {% else %}
+                                            <a href="/user_book?trek_id={{ t.trek_id }}&user_id={{ user_id }}" class="btn btn-primary btn-sm">Book Now</a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endif %}
+                            {% endfor %}
                         </tbody>
                     </table>
 
@@ -96,47 +90,31 @@
 
                 <div class="card-body pt-0">
 
-                    <table class="table table-hover align-middle mb-0">
+                    <table class="table table-hover align-middle mb-0" >
                         <thead class="table-light">
                             <tr>
                                 <th>Trek Name</th>
                                 <th>Booking Date</th>
                                 <th>Status</th>
-                                <th>Action</th>
                             </tr>
                         </thead>
 
                         <tbody>
-                            <tr>
-                                <td>Kedarkantha Trek</td>
-                                <td>10 May 2026</td>
-                                <td>
-                                    <span class="badge bg-success-subtle text-success">Booked</span>
-                                </td>
-                                <td>
-                                    <a href="#" class="btn btn-outline-secondary btn-sm">View Details</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Valley of Flowers</td>
-                                <td>2 Jun 2026</td>
-                                <td>
-                                    <span class="badge bg-secondary-subtle text-secondary">Pending</span>
-                                </td>
-                                <td>
-                                    <a href="#" class="btn btn-outline-secondary btn-sm">View Details</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Chadar Trek</td>
-                                <td>15 Jan 2026</td>
-                                <td>
-                                    <span class="badge bg-danger-subtle text-danger">Cancelled</span>
-                                </td>
-                                <td>
-                                    <a href="#" class="btn btn-outline-secondary btn-sm">View Details</a>
-                                </td>
-                            </tr>
+                            {% for b in my_bookings %}
+                                <tr>
+                                    <td>{{ b.trek_name }}</td>
+                                    <td>{{ b.booking_date.strftime('%d %b %Y') }}</td>
+                                    <td>
+                                        {% if b.status == 'Booked' %}
+                                            <span class="badge bg-success-subtle text-success">Booked</span>
+                                        {% elif b.status == 'Completed' %}
+                                            <span class="badge bg-secondary-subtle text-secondary">Completed</span>
+                                        {% elif b.status == 'Cancelled' %}
+                                            <span class="badge bg-danger-subtle text-danger">Cancelled</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
 
@@ -146,5 +124,34 @@
         </div>
 
     </div>
+
+<script>
+    function filterTreks() {
+        const diffValue = document.getElementById("diffFilter").value;
+        const locationValue = document.getElementById("locationFilter").value;
+        const searchValue = document.getElementById("searchInput").value.toLowerCase();
+        const rows = document.getElementsByName("trekRow");
+
+        for (let i = 0; i < rows.length; i++) {
+
+            const rowDiff = rows[i].getAttribute("data-diff");
+            const rowLocation = rows[i].getAttribute("data-location");
+            const rowName = rows[i].getAttribute("data-name");
+
+            if (diffValue !== "All" && rowDiff !== diffValue) {
+                rows[i].style.display = "none";
+            }
+            else if (locationValue !== "All" && rowLocation !== locationValue) {
+                rows[i].style.display = "none";
+            }
+            else if (searchValue !== "" && rowName.indexOf(searchValue) === -1) {
+                rows[i].style.display = "none";
+            }
+            else {
+                rows[i].style.display = "table-row";
+            }
+        }
+    }
+</script>
 
 {% endblock %}

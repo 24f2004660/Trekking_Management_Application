@@ -49,8 +49,8 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Available Slots</label>
-                                <input type="number" class="form-control" name="available_slots" required>
+                                <label class="form-label">Total Slots</label>
+                                <input type="number" class="form-control" name="total_slots" required>
                             </div>
 
                         </div>
@@ -73,7 +73,9 @@
                                 <select class="form-select" name="assigned_staff" required>
                                     <option selected disabled>Select Staff</option>
                                     {% for staff in staffs %}
-                                        <option value="{{ staff.id }}">{{ staff.name }}</option>
+                                    {% if staff.status == 1 %}
+                                        <option value="{{ staff.staff_id }}">{{ staff.name }}</option>
+                                    {% endif %}
                                     {% endfor %}
                                 </select>
                             </div>

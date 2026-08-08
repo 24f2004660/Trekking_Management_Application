@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<center>
+    <h1>
+        {% if status== "Pending" %}
+            Account Registered, Approval Pending by Admin!
+        {% else %}
+            Account deactivated by Admin!
+        {% endif %}
+    </h1>
+</center>
+{% endblock %}

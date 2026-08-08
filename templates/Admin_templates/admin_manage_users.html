@@ -30,7 +30,7 @@
                                 <thead class="table-light">
                                     <tr>
                                         <th>Name</th>
-                                        <!-- <th>Email</th> -->
+                                        <th>Email</th>
                                         <th>Contact</th>
                                         <th>Action</th>
                                     </tr>
@@ -38,15 +38,20 @@
 
                                 <tbody>
                                     {%for u in u_data %}
+                                    {% if u.status == 0 %}
                                         <tr>
                                             <td>{{u.name}}</td>
-                                            <!-- <td>{{u.email}}</td> -->
+                                            <td>{{u.user_back.email}}</td>
                                             <td>{{u.phone_number}}</td>
                                             <td>
-                                                <a href="#" class="btn btn-danger btn-sm">Reject</a>
+                                                <a href="/reject?user_id={{ u.user_id }}"
+                                                class="btn btn-danger btn-sm">
+                                                    Deactivate
+                                                </a>
                                             </td>
                                         
                                         </tr>
+                                    {% endif %}
                                     {%endfor%}
 
                                 </tbody>
@@ -66,36 +71,24 @@
                                 <thead class="table-light">
                                     <tr>
                                         <th>Name</th>
-                                        <!-- <th>Email</th> -->
+                                        <th>Email</th>
                                         <th>Contact</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
 
                                 <tbody>
-                                    {%for u in user_data %}
+                                    {%for u in u_data %}
+                                    {% if u.status == 1 %}
                                         <tr>
-                                            <td>{u.name}</td>
-                                            <!-- <td>{u.email}</td> -->
-                                            <td>{u.contact}</td>
-                                            <td>
-                                                <a href="#" class="btn btn-danger btn-sm">Reject</a>
-                                            </td>
+                                            <td>{{u.name}}</td>
+                                            <td>{{u.user_back.email}}</td>
+                                            <td>{{u.phone_number}}</td>
+                                            <td><a href="/approve_user?user_id={{u.user_id}}" class="btn btn-success btn-sm" >Re-activate</a></td>
+                                            
                                         </tr>
+                                    {% endif %}
                                     {%endfor%}
-                                    <tr>
-                                        <td>Neha</td>
-                                        <!-- <td>neha@mail.com</td> -->
-                                        <td>9123456780</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Arjun Mehta</td>
-                                        <!-- <td>arjun@mail.com</td> -->
-                                        <td>9968776655</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Priya Nair</td>
-                                        <!-- <td>priya@mail.com</td> -->
-                                        <td>9965433210</td>
                                     </tr>
                                 </tbody>
                             </table>
