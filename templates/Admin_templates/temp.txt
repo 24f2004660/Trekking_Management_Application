@@ -1,7 +1,0 @@
-password input length
-
-js -- query for search bar
-
-admin_edt 88
-
-ORM over DBMS
